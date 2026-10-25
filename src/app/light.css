@@ -1,0 +1,29 @@
+/* Light theme: warm paper, deep forest ink, rich green, vivid orange. */
+html[data-theme="light"] {
+  color-scheme: light;
+  --ink-950: #f7f5ee;
+  --ink-900: #efece1;
+  --ink-800: #e6e2d3;
+  --ink-700: #d8d3bf;
+  --ink-600: #c3bda4;
+  --bone-50: #08150e;
+  --bone-100: #10231a;
+  --bone-300: #3b5044;
+  --bone-500: #5a6d62;
+  --lime-glow: #0a8044;
+  --lime-dim: #3aa571;
+  --lime-hover: #0b9650;
+  --copper-400: #d4501a;
+  --copper-600: #a63a0f;
+  --glow: 10 128 68;
+  --glass-bg: rgb(255 255 255 / 0.65);
+  --glass-border: rgb(8 21 14 / 0.1);
+  --hairline: rgb(8 21 14 / 0.16);
+  --scroll-thumb: #c3bda4;
+  --scroll-hover: #0a8044;
+}
+
+html[data-theme="light"] body::before {
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+}

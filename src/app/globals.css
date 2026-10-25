@@ -1,26 +1,193 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ---------- Animations ---------- */
+@theme {
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 9s ease-in-out infinite;
+  --animate-pulse-slow: pulse-slow 4s ease-in-out infinite;
+  --animate-spin-slow: spin 28s linear infinite;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.45; }
+    50% { opacity: 1; }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ---------- DARK theme (default): bioluminescent ---------- */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --ink-950: #040706;
+  --ink-900: #08100c;
+  --ink-800: #0c1813;
+  --ink-700: #12241c;
+  --ink-600: #1b3329;
+  --bone-50: #f5f2e9;
+  --bone-100: #e8e4d6;
+  --bone-300: #b9b6a6;
+  --bone-500: #7d7f72;
+  --lime-glow: #c8ff3a;
+  --lime-dim: #8fb82a;
+  --lime-hover: #d6ff63;
+  --copper-400: #e39a63;
+  --copper-600: #b8693a;
+  --glow: 200 255 58;
+  --glass-bg: rgb(255 255 255 / 0.04);
+  --glass-border: rgb(255 255 255 / 0.08);
+  --hairline: rgb(232 228 214 / 0.12);
+  --scroll-thumb: #1b3329;
+  --scroll-hover: #8fb82a;
+}
+
+/* ---------- LIGHT theme: clean laboratory ----------
+   Same names, flipped values:
+   "ink" = page surfaces (now pearl white), "bone" = text (now deep forest). */
+[data-theme="light"] {
+  color-scheme: light;
+  --ink-950: #f4f6f1;
+  --ink-900: #eaefe6;
+  --ink-800: #dfe7da;
+  --ink-700: #cdd8c6;
+  --ink-600: #b3c2aa;
+  --bone-50: #06130c;
+  --bone-100: #0e2217;
+  --bone-300: #34493d;
+  --bone-500: #51665a;
+  --lime-glow: #0a7d45;
+  --lime-dim: #2f9a63;
+  --lime-hover: #0b9650;
+  --copper-400: #c2501b;
+  --copper-600: #94390f;
+  --glow: 10 125 69;
+  --glass-bg: rgb(255 255 255 / 0.6);
+  --glass-border: rgb(6 19 12 / 0.1);
+  --hairline: rgb(6 19 12 / 0.16);
+  --scroll-thumb: #b3c2aa;
+  --scroll-hover: #0a7d45;
+}
+
+/* ---------- Tailwind color names point at the variables above ---------- */
+@theme inline {
+  --color-ink-950: var(--ink-950);
+  --color-ink-900: var(--ink-900);
+  --color-ink-800: var(--ink-800);
+  --color-ink-700: var(--ink-700);
+  --color-ink-600: var(--ink-600);
+
+  --color-bone-50: var(--bone-50);
+  --color-bone-100: var(--bone-100);
+  --color-bone-300: var(--bone-300);
+  --color-bone-500: var(--bone-500);
+
+  --color-lime-glow: var(--lime-glow);
+  --color-lime-dim: var(--lime-dim);
+  --color-lime-hover: var(--lime-hover);
+  --color-copper-400: var(--copper-400);
+  --color-copper-600: var(--copper-600);
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+}
+
+/* ---------- Base styles ---------- */
+@layer base {
+  html {
+    @apply bg-ink-950;
+  }
+
+  body {
+    @apply bg-ink-950 text-bone-100 font-sans antialiased;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    @apply bg-lime-glow text-ink-950;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--lime-glow);
+    outline-offset: 3px;
+  }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--ink-950); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border-radius: 999px;
+    border: 2px solid var(--ink-950);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--scroll-hover); }
+}
+
+/* Film grain over the whole site */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+[data-theme="light"] body::before {
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+}
+
+/* ---------- Theme-switch ripple (Chrome / Edge) ---------- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
+
+/* ---------- Reusable utilities ---------- */
+@utility glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+}
+
+@utility hairline {
+  border: 1px solid var(--hairline);
+}
+
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px currentColor;
+}
+
+/* Outlined lettering. Change its color with [--stroke:var(--lime-glow)] */
+@utility ghost-text {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--stroke, var(--bone-100));
+}
+
+@utility display-tight {
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
